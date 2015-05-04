@@ -57,9 +57,14 @@ public class Main {
             input = in.nextInt();
         }
 
-        game.setMatchesByRowCount(input);
-        game.printMatchesInRows();
 
+        game.setMatchesByRowCount(input);
+
+        while(game.getMatches()>0){
+            game.nextTurn();
+        }
+
+        game.printWinningPlayer();
 
 
     }

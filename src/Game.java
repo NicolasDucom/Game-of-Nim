@@ -6,19 +6,23 @@ import java.util.ArrayList;
 public class Game {
     int matches;
     ArrayList<Integer> matchesInRows;
-    Player player1, player2;
+    Player player1, player2, lastPlayertoHavePlayed;
 
     public Game(Player p1 ,Player p2){
         player1 = p1;
         player2 = p2;
+        lastPlayertoHavePlayed = null;
     }
 
     public int getMatches() {
         return matches;
     }
 
-    public void setMatches(int matches) {
-        this.matches = matches;
+    public void setMatches() {
+        matches = 0;
+        for(int i:getMatchesInRows()){
+            matches += i;
+        }
     }
 
     public ArrayList<Integer> getMatchesInRows() {
@@ -49,9 +53,9 @@ public class Game {
         ArrayList<Integer> matchesInRows = new ArrayList<Integer>();
         for(int i = 0; i < rows; i++){
             matchesInRows.add(1+2*i);
-            matches += 1+2*i;
         }
         setMatchesInRows(matchesInRows);
+        setMatches();
     }
 
     public void printMatchesInRows(){
@@ -63,6 +67,23 @@ public class Game {
             }
             System.out.println(lineOutput);
         }
+    }
+
+    public void nextTurn(){
+        printMatchesInRows();
+        if (lastPlayertoHavePlayed == null || lastPlayertoHavePlayed.equals(player2)){
+            player1.play(this.getMatchesInRows());
+            setMatches();
+            lastPlayertoHavePlayed = player1;
+        } else if(lastPlayertoHavePlayed.equals(player1)){
+            player2.play(this.getMatchesInRows());
+            setMatches();
+            lastPlayertoHavePlayed = player2;
+        }
+    }
+
+    public void printWinningPlayer(){
+        System.out.println("Le "+(lastPlayertoHavePlayed.equals(player1)?"Joueur 1":"Joueur 2")+" a gagné");
     }
 
 
