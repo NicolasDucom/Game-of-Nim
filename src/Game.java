@@ -6,7 +6,10 @@ import java.util.ArrayList;
 public class Game {
     int matches;
     ArrayList<Integer> matchesInRows;
-    Player player1, player2, lastPlayertoHavePlayed;
+    Player player1;
+    Player player2;
+    Player lastPlayertoHavePlayed;
+    Player currentPlayer;
 
     public Game(Player p1 ,Player p2){
         player1 = p1;
@@ -49,6 +52,26 @@ public class Game {
         this.player2 = player2;
     }
 
+    public Player getLastPlayertoHavePlayed() {
+        return lastPlayertoHavePlayed;
+    }
+
+    public void setLastPlayertoHavePlayed(Player lastPlayertoHavePlayed) {
+        this.lastPlayertoHavePlayed = lastPlayertoHavePlayed;
+        if(getLastPlayertoHavePlayed().equals(player1))
+            setCurrentPlayer(player2);
+        else
+            setCurrentPlayer(player1);
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
     public void setMatchesByRowCount(int rows){
         ArrayList<Integer> matchesInRows = new ArrayList<Integer>();
         for(int i = 0; i < rows; i++){
@@ -72,13 +95,13 @@ public class Game {
     public void nextTurn(){
         printMatchesInRows();
         if (lastPlayertoHavePlayed == null || lastPlayertoHavePlayed.equals(player2)){
-            player1.play(this.getMatchesInRows());
+            player1.play(this);
             setMatches();
-            lastPlayertoHavePlayed = player1;
+            setLastPlayertoHavePlayed(player1);
         } else if(lastPlayertoHavePlayed.equals(player1)){
-            player2.play(this.getMatchesInRows());
+            player2.play(this);
             setMatches();
-            lastPlayertoHavePlayed = player2;
+            setLastPlayertoHavePlayed(player2);
         }
     }
 

@@ -20,7 +20,6 @@ public class Main {
         input = in.nextInt();
 
         while(!(1 <= input && input <= 3)){
-            System.out.println(input);
             System.out.println("Veuillez selectionner une option valide");
             System.out.println("Choisir:");
             input = in.nextInt();
@@ -28,20 +27,20 @@ public class Main {
 
         switch(input){
             case 1:
-                player1 = new Player(false);
-                player2 = new Player(false);
+                player1 = new Player(false,"Joueur 1");
+                player2 = new Player(false,"Joueur 2");
                 break;
             case 2:
-                player1 = new Player(false);
-                player2 = new Player(true);
+                player1 = new Player(false,"Joueur 1");
+                player2 = new Player(true,"Joueur 2 (IA)");
                 break;
             case 3:
-                player1 = new Player(true);
-                player2 = new Player(true);
+                player1 = new Player(true,"Joueur 1 (IA)");
+                player2 = new Player(true,"Joueur 2 (IA)");
                 break;
             default:
-                player1 = new Player(false);
-                player2 = new Player(false);
+                player1 = new Player(false,"Joueur 1");
+                player2 = new Player(false,"Joueur 2");
         }
 
 

@@ -7,9 +7,19 @@ import java.util.Scanner;
 public class Player {
 
     boolean ai;
+    String name;
 
-    public Player( boolean ai){
+    public Player( boolean ai ,String name){
         this.ai = ai;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isAi() {
@@ -20,11 +30,11 @@ public class Player {
         this.ai = ai;
     }
 
-    public void play(ArrayList<Integer> matchesInRows){
+    public void play(Game game){
         if(isAi())
-            playAsAi(matchesInRows);
+            playAsAi(game);
         else
-            playAsHuman(matchesInRows);
+            playAsHuman(game.getMatchesInRows());
     }
 
     public void playAsHuman(ArrayList<Integer> matchesInRows){
@@ -47,10 +57,17 @@ public class Player {
         }
 
         matchesInRows.set(row, matchesInRows.get(row) - matches);
-        System.out.println("le joueur a enlevé " + matches + " allumettes de la rangée " + (row + 1));
+        System.out.println(getName()+" a enlevé " + matches + " allumette"+((matches>1)?"s":"")+" de la rangée " + (row + 1));
     }
 
-    public void playAsAi(ArrayList<Integer> matchesInRows){
-        System.out.println("AI play not implemented yet");
+    public void playAsAi(Game game){
+        int n = 0;
+        System.out.println("Building game tree...");
+        ArrayList<Integer> matchesInRows = (ArrayList<Integer>) game.getMatchesInRows().clone();
+        Node node = new Node(game.getMatches(), null);
+        node.buildGameTree(matchesInRows, game.getCurrentPlayer(), game.getMatches(), null,n);
+       // System.out.println(n);
     }
+
+
 }
