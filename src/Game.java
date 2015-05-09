@@ -64,6 +64,14 @@ public class Game {
             setCurrentPlayer(player1);
     }
 
+    public Player returnPlayerOpposite(Player player){
+        if(player.equals(player1))
+            return player2;
+        else
+            return player1;
+
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }

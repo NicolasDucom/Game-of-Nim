@@ -63,11 +63,26 @@ public class Player {
     public void playAsAi(Game game){
         System.out.println("Building game tree...");
         ArrayList<Integer> matchesInRows = (ArrayList<Integer>) game.getMatchesInRows().clone();
-        Node node = new Node(game.getMatches());
-        node.preBuildGameTree(matchesInRows, game.getCurrentPlayer(), game.getMatches());
-        System.out.println("root node children :"+node.getChildNodes().size());
-        node.printGameTree();
+        Node root = buildGameTree(game.getMatches(),matchesInRows, game, game.player1);
+
+        //node.preBuildGameTree(matchesInRows, game.getCurrentPlayer(), game.getMatches());
+        System.out.println("root node children :"+root.getChildNodes().size());
+        root.printGameTree();
     }
 
-
+    static Node buildGameTree (int matches,ArrayList<Integer> matchesInRows, Game game, Player player)
+    {
+        Node n = new Node();
+        n.setMatches(matches);
+        n.setPlayer(game.returnPlayerOpposite(player));
+        ArrayList<Integer> matchesInRowsToModify;
+        for (int i = 1;i < n.maxMatchesInTurn(matchesInRows); i++){
+            for(int row:n.rowsInWhichMatchesCanBeRemoved(matchesInRows, i)){
+                matchesInRowsToModify = (ArrayList<Integer>) matchesInRows.clone();
+                matchesInRowsToModify.set(row, matchesInRowsToModify.get(row) - i);
+                n.childNodes.add(buildGameTree(matches-1, matchesInRowsToModify, game, n.getPlayer()));
+            }
+        }
+        return n;
+    }
 }

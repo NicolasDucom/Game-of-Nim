@@ -13,6 +13,10 @@ public class Node {
         childNodes = new ArrayList<Node>();
     }
 
+    public Node(){
+        childNodes = new ArrayList<Node>();
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -37,7 +41,7 @@ public class Node {
         this.matches = matches;
     }
 
-    public int maxMatchesInTurn(ArrayList<Integer> matchesInRows){
+    public static int maxMatchesInTurn(ArrayList<Integer> matchesInRows){
         int max = 0;
         for(int i:matchesInRows){
             if(i>max){
@@ -49,7 +53,7 @@ public class Node {
     }
 
 
-    public ArrayList<Integer> rowsInWhichMatchesCanBeRemoved(ArrayList<Integer> matchesInRows, int nMatches){
+    public static ArrayList<Integer> rowsInWhichMatchesCanBeRemoved(ArrayList<Integer> matchesInRows, int nMatches){
         ArrayList<Integer> rows = new  ArrayList<Integer>();
         for(int i = 0; i<matchesInRows.size(); i++){
             if(matchesInRows.get(i)>nMatches)
@@ -63,12 +67,12 @@ public class Node {
         System.out.println("Node");
         System.out.println(this.getMatches());
         for(Node n:this.getChildNodes()){
-            System.out.println(" n : " + n.getMatches());
+            System.out.println(" n ["+n.getPlayer().getName()+"]: " + n.getMatches());
             n.printGameTree();
         }
     }
 
-    public void preBuildGameTree(ArrayList<Integer> matchesInRows, Player player, int matches){
+/*    public void preBuildGameTree(ArrayList<Integer> matchesInRows, Player player, int matches){
         ArrayList<Integer> matchesInRowsToModify,matchesInRowsToModifyForEachRow;
         int matchesToModify;
         System.out.println("root :" + maxMatchesInTurn(matchesInRows));
@@ -85,7 +89,7 @@ public class Node {
                 }
             }
         }
-    }
+    }*/
 
     public int verticalDistanceFromNode(Node childNode, Node targetNode,int n){
        for(Node node:targetNode.childNodes){
@@ -98,7 +102,7 @@ public class Node {
         return -1;
     }
 
-    public void buildGameTree(ArrayList<Integer> matchesInRows, Player player, int matches, Node parentNode, Node root){
+    /*public void buildGameTree(ArrayList<Integer> matchesInRows, Player player, int matches, Node parentNode, Node root){
         Node node;
         node = new Node(matches);
         parentNode.childNodes.add(node);
@@ -121,5 +125,7 @@ public class Node {
 
         }
 
-    }
+    }*/
+
+
 }
