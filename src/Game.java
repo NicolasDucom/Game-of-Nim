@@ -102,7 +102,9 @@ public class Game {
 
     public void nextTurn(){
         printMatchesInRows();
-        if (lastPlayertoHavePlayed == null || lastPlayertoHavePlayed.equals(player2)){
+        if (this.getLastPlayertoHavePlayed() == null)
+            this.setLastPlayertoHavePlayed(this.getPlayer2());
+        if (lastPlayertoHavePlayed.equals(player2)){
             player1.play(this);
             setMatches();
             setLastPlayertoHavePlayed(player1);
