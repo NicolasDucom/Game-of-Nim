@@ -68,6 +68,11 @@ public class Node {
         this.miniMax = miniMax;
     }
 
+    /**
+     * Retourne la plus grande rangee (nombre max d'allumettes qui peuvent etre enlevées en un tour...)
+     * @param matchesInRows
+     * @return
+     */
     public static int maxMatchesInTurn(ArrayList<Integer> matchesInRows){
         int max = 0;
         for(int i:matchesInRows){
@@ -78,7 +83,12 @@ public class Node {
         return max;
     }
 
-
+    /**
+     * retourne toutes les rangées ou le nombre d'allumettes peut etre enlevé
+     * @param matchesInRows
+     * @param nMatches
+     * @return
+     */
     public static ArrayList<Integer> rowsInWhichMatchesCanBeRemoved(ArrayList<Integer> matchesInRows, int nMatches){
         ArrayList<Integer> rows = new  ArrayList<Integer>();
         for(int i = 0; i<matchesInRows.size(); i++){
@@ -99,6 +109,13 @@ public class Node {
         }
     }
 
+    /**
+     * Distance verticale entre deux Noeuds
+     * @param childNode
+     * @param targetNode
+     * @param n
+     * @return
+     */
     public int verticalDistanceFromNode(Node childNode, Node targetNode,int n){
        for(Node node:targetNode.childNodes){
         if(node.equals(childNode)){

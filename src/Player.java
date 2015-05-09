@@ -6,7 +6,7 @@ import java.util.Scanner;
  */
 public class Player {
 
-    boolean ai;
+    boolean ai; //Est-ce que le joueur est une IA ?
     String name;
 
     public Player( boolean ai ,String name){
@@ -37,6 +37,10 @@ public class Player {
             playAsHuman(game.getMatchesInRows());
     }
 
+    /**
+     * Si le joueur est un humain -> interface de selection
+     * @param matchesInRows
+     */
     public void playAsHuman(ArrayList<Integer> matchesInRows){
         Scanner in = new Scanner(System.in);
         int row, matches;
@@ -60,12 +64,26 @@ public class Player {
         System.out.println(getName()+" a enlevé " + matches + " allumette"+((matches>1)?"s":"")+" de la rangée " + (row + 1));
     }
 
+    /**
+     * Si le joueur est une IA, on trouve la meilleur option de jeu
+     * @param game
+     */
     public void playAsAi(Game game){
-        Node bestPlay = findBestPlay(game.getCurrentPlayer(),game);
-        game.getMatchesInRows().set(bestPlay.getnRow(),game.getMatchesInRows().get(bestPlay.getnRow())-(bestPlay.getParentMatches()-bestPlay.getMatches()));
-        System.out.println(getName() + " a enlevé " + (bestPlay.getParentMatches() - bestPlay.getMatches()) + " allumette" + (((bestPlay.getParentMatches() - bestPlay.getMatches()) > 1) ? "s" : "") + " de la rangée " + (bestPlay.getnRow() + 1));
+        Node bestMove= findBestMove(game.getCurrentPlayer(), game);
+        game.getMatchesInRows().set(bestMove.getnRow(),game.getMatchesInRows().get(bestMove.getnRow())-(bestMove.getParentMatches()-bestMove.getMatches()));
+        System.out.println(getName() + " a enlevé " + (bestMove.getParentMatches() - bestMove.getMatches()) + " allumette" + (((bestMove.getParentMatches() - bestMove.getMatches()) > 1) ? "s" : "") + " de la rangée " + (bestMove.getnRow() + 1));
     }
 
+    /**
+     * Creation d'arbre de jeu (recursif), liste toutes les options de jeu possible (y compris la selection d'un meme nombre d'allumettes sur des rangees differentes)
+     * @param matches
+     * @param nRow
+     * @param parentMatches
+     * @param matchesInRows
+     * @param game
+     * @param player
+     * @return
+     */
     static Node buildGameTree (int matches, int nRow, int parentMatches,ArrayList<Integer> matchesInRows, Game game, Player player)
     {
         Node n = new Node();
@@ -74,8 +92,8 @@ public class Player {
         n.setMatches(matches);
         n.setPlayer(game.returnPlayerOpposite(player));
         ArrayList<Integer> matchesInRowsToModify;
-        for (int i = 1;i <= n.maxMatchesInTurn(matchesInRows); i++){
-            for(int row:n.rowsInWhichMatchesCanBeRemoved(matchesInRows, i)){
+        for (int i = 1;i <= n.maxMatchesInTurn(matchesInRows); i++){ //du minimum au maximum nombre d'allumettes qui peuvent etre enlevees
+            for(int row:n.rowsInWhichMatchesCanBeRemoved(matchesInRows, i)){ //rangees sur lequelles un nombre d'allumettes peuvent etre enlevées
                 matchesInRowsToModify = (ArrayList<Integer>) matchesInRows.clone();
                 matchesInRowsToModify.set(row, matchesInRowsToModify.get(row) - i);
                 n.childNodes.add(buildGameTree(matches-i, row, matches, matchesInRowsToModify, game, n.getPlayer()));
@@ -84,6 +102,12 @@ public class Player {
         return n;
     }
 
+    /**
+     * Attribution des points MinMax sur tous les noeuds de l'arbre
+     * @param node
+     * @param game
+     * @return
+     */
     public static int computeMinimax(Node node, Game game){
         int res;
         if(node.matches == 0)
@@ -104,17 +128,18 @@ public class Player {
         return res;
     }
 
-    public static Node findBestPlay(Player player, Game game){
-        Node root = buildGameTree(game.getMatches(),0,game.getMatches(),(ArrayList<Integer>) game.getMatchesInRows().clone(), game, game.player1);
+    /**
+     * Retourne le noeud correspondant a la meilleur option de jeu
+     * @param player
+     * @param game
+     * @return
+     */
+    public static Node findBestMove(Player player, Game game){
+        Node root = buildGameTree(game.getMatches(),0,game.getMatches(),(ArrayList<Integer>) game.getMatchesInRows().clone(), game, game.player1); //Creation de l'arbre
         Node moveTo;
-
-        //System.out.println("root node children :" + root.getChildNodes().size());
-
-        ArrayList<Integer> childNodeValues = new ArrayList<Integer>();
         moveTo = root.getChildNodes().get(0);
         for(Node n:root.getChildNodes()){
-            childNodeValues.add(computeMinimax(n,game));
-            //System.out.println("minimax "+n.getMiniMax());
+            computeMinimax(n, game); //Attribution des points MinMax sur tous les noeud fils du noeud pere
             if(player.equals(game.getPlayer1()) && n.getMiniMax()>moveTo.getMiniMax())
                 moveTo = n;
             else

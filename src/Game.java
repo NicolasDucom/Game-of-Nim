@@ -56,6 +56,10 @@ public class Game {
         return lastPlayertoHavePlayed;
     }
 
+    /**
+     * On doit savoir qui vient de jouer pour alterner de joueur sur le prochain tour
+     * @param lastPlayertoHavePlayed
+     */
     public void setLastPlayertoHavePlayed(Player lastPlayertoHavePlayed) {
         this.lastPlayertoHavePlayed = lastPlayertoHavePlayed;
         if(getLastPlayertoHavePlayed().equals(player1))
@@ -80,6 +84,10 @@ public class Game {
         this.currentPlayer = currentPlayer;
     }
 
+    /**
+     * On a notre nombre de rangées, on leur attribue un nombre d'allumettes
+     * @param rows
+     */
     public void setMatchesByRowCount(int rows){
         ArrayList<Integer> matchesInRows = new ArrayList<Integer>();
         for(int i = 0; i < rows; i++){
@@ -115,6 +123,9 @@ public class Game {
         }
     }
 
+    /**
+     * Le dernier joueur a avoir joué a perdu
+     */
     public void printWinningPlayer(){
         System.out.println("Le "+(lastPlayertoHavePlayed.equals(player1)?"Joueur 2":"Joueur 1")+" a gagné");
     }
