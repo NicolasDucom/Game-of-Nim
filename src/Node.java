@@ -6,12 +6,10 @@ import java.util.ArrayList;
 public class Node {
     int matches;
     Player player;
-    Node parentNode;
     ArrayList<Node> childNodes;
 
-    public Node(int matches, Node parentNode){
+    public Node(int matches){
         this.matches = matches;
-        this.parentNode = parentNode;
         childNodes = new ArrayList<Node>();
     }
 
@@ -46,46 +44,82 @@ public class Node {
                 max = i;
             }
         }
-       // System.out.println("maxMatchesInTurn:"+max);
+        System.out.println("maxMatchesInTurn:"+max);
         return max;
     }
 
-    public void removeMatchesFromBiggestRow(ArrayList<Integer> matchesInRows, int nMatches){
-        int biggestRow = 0;
-        int max = 0;
-        for(int i = 0; i < matchesInRows.size(); i++){
-            if(matchesInRows.get(i)>max) {
-                biggestRow = i;
-                max = matchesInRows.get(i);
-            }
+
+    public ArrayList<Integer> rowsInWhichMatchesCanBeRemoved(ArrayList<Integer> matchesInRows, int nMatches){
+        ArrayList<Integer> rows = new  ArrayList<Integer>();
+        for(int i = 0; i<matchesInRows.size(); i++){
+            if(matchesInRows.get(i)>nMatches)
+                rows.add(i);
         }
-        //System.out.println("Removing "+max+" from row "+(biggestRow+1));
-        matchesInRows.set(biggestRow, matchesInRows.get(biggestRow) - nMatches);
+        return rows;
     }
 
-    public Node buildGameTree(ArrayList<Integer> matchesInRows, Player player, int matches, Node parentNode, int n){
-        Node node;
-        if(parentNode!=null){
-            node = parentNode;
+
+    public void printGameTree(){
+        System.out.println("Node");
+        System.out.println(this.getMatches());
+        for(Node n:this.getChildNodes()){
+            System.out.println(" n : " + n.getMatches());
+            n.printGameTree();
         }
-        else {
-        node = new Node(matches,null);
-        }
-        ArrayList<Integer> matchesInRowsToModify;
+    }
+
+    public void preBuildGameTree(ArrayList<Integer> matchesInRows, Player player, int matches){
+        ArrayList<Integer> matchesInRowsToModify,matchesInRowsToModifyForEachRow;
         int matchesToModify;
-        for(int i = 1; i<=maxMatchesInTurn(matchesInRows); i++){
+        System.out.println("root :" + maxMatchesInTurn(matchesInRows));
+        for(int i = 1; i <= maxMatchesInTurn(matchesInRows); i++){
             matchesInRowsToModify = (ArrayList<Integer>) matchesInRows.clone();
             matchesToModify = (int) matches-i;
-            //System.out.println(matchesToModify);
-            removeMatchesFromBiggestRow(matchesInRowsToModify,i);
-            if(matches > 0){
-                node.childNodes.add(buildGameTree(matchesInRowsToModify, player, matchesToModify, null, n++));
-            } else {
-                System.out.println(n);
-                return node;
+            System.out.println(matchesToModify);
+            for(int row:rowsInWhichMatchesCanBeRemoved(matchesInRowsToModify,i)){
+                System.out.println("prebuild child:"+row);
+                matchesInRowsToModifyForEachRow = (ArrayList<Integer>) matchesInRowsToModify.clone();
+                matchesInRowsToModifyForEachRow.set(row, matchesInRowsToModifyForEachRow.get(row) - i);
+                if(matchesToModify >= 0){
+                    this.buildGameTree(matchesInRowsToModifyForEachRow, player, matchesToModify, this, this);
+                }
             }
         }
+    }
 
-        return node;
+    public int verticalDistanceFromNode(Node childNode, Node targetNode,int n){
+       for(Node node:targetNode.childNodes){
+        if(node.equals(childNode)){
+            return n;
+        } else {
+            verticalDistanceFromNode(childNode,node,n++);
+        }
+       }
+        return -1;
+    }
+
+    public void buildGameTree(ArrayList<Integer> matchesInRows, Player player, int matches, Node parentNode, Node root){
+        Node node;
+        node = new Node(matches);
+        parentNode.childNodes.add(node);
+
+        System.out.println("Vertical distance from root :" + verticalDistanceFromNode(this,root,0));
+        ArrayList<Integer> matchesInRowsToModify,matchesInRowsToModifyForEachRow;
+        int matchesToModify;
+        for(int i = 1; i <= maxMatchesInTurn(matchesInRows); i++){
+            matchesInRowsToModify = (ArrayList<Integer>) matchesInRows.clone();
+            matchesToModify = (int) matches-i;
+            System.out.println(matchesToModify);
+            for(int row:rowsInWhichMatchesCanBeRemoved(matchesInRowsToModify,i)){
+                matchesInRowsToModifyForEachRow = (ArrayList<Integer>) matchesInRows.clone();
+                matchesInRowsToModifyForEachRow.set(row, matchesInRowsToModifyForEachRow.get(row) - i);
+                //removeMatchesFromBiggestRow(matchesInRowsToModify,i);
+                if(matchesToModify > 0){
+                    node.buildGameTree(matchesInRowsToModifyForEachRow, player, matchesToModify,node, root);
+                }
+            }
+
+        }
+
     }
 }

@@ -61,12 +61,12 @@ public class Player {
     }
 
     public void playAsAi(Game game){
-        int n = 0;
         System.out.println("Building game tree...");
         ArrayList<Integer> matchesInRows = (ArrayList<Integer>) game.getMatchesInRows().clone();
-        Node node = new Node(game.getMatches(), null);
-        node.buildGameTree(matchesInRows, game.getCurrentPlayer(), game.getMatches(), null,n);
-       // System.out.println(n);
+        Node node = new Node(game.getMatches());
+        node.preBuildGameTree(matchesInRows, game.getCurrentPlayer(), game.getMatches());
+        System.out.println("root node children :"+node.getChildNodes().size());
+        node.printGameTree();
     }
 
 
