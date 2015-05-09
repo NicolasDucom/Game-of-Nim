@@ -63,7 +63,7 @@ public class Player {
     public void playAsAi(Game game){
         Node bestPlay = findBestPlay(game.getCurrentPlayer(),game);
         game.getMatchesInRows().set(bestPlay.getnRow(),game.getMatchesInRows().get(bestPlay.getnRow())-(bestPlay.getParentMatches()-bestPlay.getMatches()));
-        System.out.println(getName()+" a enlevé " + (bestPlay.getParentMatches()-bestPlay.getMatches()) + " allumette"+(((bestPlay.getParentMatches()-bestPlay.getMatches())>1)?"s":"")+" de la rangée " + (bestPlay.getnRow()+1));
+        System.out.println(getName() + " a enlevé " + (bestPlay.getParentMatches() - bestPlay.getMatches()) + " allumette" + (((bestPlay.getParentMatches() - bestPlay.getMatches()) > 1) ? "s" : "") + " de la rangée " + (bestPlay.getnRow() + 1));
     }
 
     static Node buildGameTree (int matches, int nRow, int parentMatches,ArrayList<Integer> matchesInRows, Game game, Player player)
@@ -74,7 +74,7 @@ public class Player {
         n.setMatches(matches);
         n.setPlayer(game.returnPlayerOpposite(player));
         ArrayList<Integer> matchesInRowsToModify;
-        for (int i = 1;i < n.maxMatchesInTurn(matchesInRows); i++){
+        for (int i = 1;i <= n.maxMatchesInTurn(matchesInRows); i++){
             for(int row:n.rowsInWhichMatchesCanBeRemoved(matchesInRows, i)){
                 matchesInRowsToModify = (ArrayList<Integer>) matchesInRows.clone();
                 matchesInRowsToModify.set(row, matchesInRowsToModify.get(row) - i);
@@ -97,7 +97,7 @@ public class Player {
         else{
             res = 1;
             for(Node n:node.getChildNodes())
-                res = Math.max(res,computeMinimax(n,game));
+                res = Math.min(res,computeMinimax(n,game));
         }
 
         node.setMiniMax(res);
@@ -106,15 +106,15 @@ public class Player {
 
     public static Node findBestPlay(Player player, Game game){
         Node root = buildGameTree(game.getMatches(),0,game.getMatches(),(ArrayList<Integer>) game.getMatchesInRows().clone(), game, game.player1);
-        Node moveTo = new Node();
-        moveTo.setMiniMax(-2);
-        //node.preBuildGameTree(matchesInRows, game.getCurrentPlayer(), game.getMatches());
-        System.out.println("root node children :" + root.getChildNodes().size());
+        Node moveTo;
+
+        //System.out.println("root node children :" + root.getChildNodes().size());
 
         ArrayList<Integer> childNodeValues = new ArrayList<Integer>();
         moveTo = root.getChildNodes().get(0);
         for(Node n:root.getChildNodes()){
             childNodeValues.add(computeMinimax(n,game));
+            //System.out.println("minimax "+n.getMiniMax());
             if(player.equals(game.getPlayer1()) && n.getMiniMax()>moveTo.getMiniMax())
                 moveTo = n;
             else

@@ -82,8 +82,9 @@ public class Node {
     public static ArrayList<Integer> rowsInWhichMatchesCanBeRemoved(ArrayList<Integer> matchesInRows, int nMatches){
         ArrayList<Integer> rows = new  ArrayList<Integer>();
         for(int i = 0; i<matchesInRows.size(); i++){
-            if(matchesInRows.get(i)>nMatches)
+            if(matchesInRows.get(i)>=nMatches){
                 rows.add(i);
+            }
         }
         return rows;
     }

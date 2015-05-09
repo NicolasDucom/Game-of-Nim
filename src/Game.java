@@ -114,7 +114,7 @@ public class Game {
     }
 
     public void printWinningPlayer(){
-        System.out.println("Le "+(lastPlayertoHavePlayed.equals(player1)?"Joueur 1":"Joueur 2")+" a gagné");
+        System.out.println("Le "+(lastPlayertoHavePlayed.equals(player1)?"Joueur 2":"Joueur 1")+" a gagné");
     }
 
 
