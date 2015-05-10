@@ -46,11 +46,12 @@ public class Player {
         int row, matches;
         System.out.println("Sur quelle rangee voulez-vous prendre une allumette ?");
         row = in.nextInt();
-        row--;
-        while(!(row >= 0 && row < matchesInRows.size()) || !(matchesInRows.get(row) > 0)){
+
+        while(!(row > 0 && row <= matchesInRows.size()) || !(matchesInRows.get(row-1) > 0)){
             System.out.println("Veuillez selectionner une rangee valide");
             row = in.nextInt();
         }
+        row--;
 
         System.out.println("Combien d'allumettes voulez-vous prendre sur la rangée "+(row+1)+"?");
         matches = in.nextInt();
