@@ -61,11 +61,11 @@ public class Game {
      * @param lastPlayertoHavePlayed
      */
     public void setLastPlayertoHavePlayed(Player lastPlayertoHavePlayed) {
-        this.lastPlayertoHavePlayed = lastPlayertoHavePlayed;
-        if(getLastPlayertoHavePlayed().equals(player1))
-            setCurrentPlayer(player2);
+        setLastPlayertoHavePlayed(lastPlayertoHavePlayed);
+        if(getLastPlayertoHavePlayed().equals(getPlayer1()))
+            setCurrentPlayer(getPlayer2());
         else
-            setCurrentPlayer(player1);
+            setCurrentPlayer(getPlayer1());
     }
 
     public Player returnPlayerOpposite(Player player){
@@ -98,10 +98,10 @@ public class Game {
     }
 
     public void printMatchesInRows(){
-        for(int i = 0; i < matchesInRows.size(); i++){
+        for(int i = 0; i < getMatchesInRows().size(); i++){
             String lineOutput = "";
             lineOutput += i+1+":";
-            for(int j = 0; j < matchesInRows.get(i); j++){
+            for(int j = 0; j < getMatchesInRows().get(i); j++){
                 lineOutput += " |";
             }
             System.out.println(lineOutput);
@@ -112,14 +112,14 @@ public class Game {
         printMatchesInRows();
         if (this.getLastPlayertoHavePlayed() == null)
             this.setLastPlayertoHavePlayed(this.getPlayer2());
-        if (lastPlayertoHavePlayed.equals(player2)){
-            player1.play(this);
+        if (getLastPlayertoHavePlayed().equals(getPlayer2())){
+            getPlayer1().play(this);
             setMatches();
-            setLastPlayertoHavePlayed(player1);
-        } else if(lastPlayertoHavePlayed.equals(player1)){
-            player2.play(this);
+            setLastPlayertoHavePlayed(getPlayer1());
+        } else if(getLastPlayertoHavePlayed().equals(getPlayer1())){
+            getPlayer2().play(this);
             setMatches();
-            setLastPlayertoHavePlayed(player2);
+            setLastPlayertoHavePlayed(getPlayer2());
         }
     }
 
@@ -127,7 +127,7 @@ public class Game {
      * Le dernier joueur a avoir joué a perdu
      */
     public void printWinningPlayer(){
-        System.out.println("Le "+(lastPlayertoHavePlayed.equals(player1)?"Joueur 2":"Joueur 1")+" a gagné");
+        System.out.println("Le "+currentPlayer.getName()+" a gagné");
     }
 
 

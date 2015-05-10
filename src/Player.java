@@ -95,9 +95,9 @@ public class Player {
         ArrayList<Integer> matchesInRowsToModify;
         for (int i = 1;i <= n.maxMatchesInTurn(matchesInRows); i++){ //du minimum au maximum nombre d'allumettes qui peuvent etre enlevees
             for(int row:n.rowsInWhichMatchesCanBeRemoved(matchesInRows, i)){ //rangees sur lequelles un nombre d'allumettes peuvent etre enlevées
-                matchesInRowsToModify = (ArrayList<Integer>) matchesInRows.clone();
+                matchesInRowsToModify = (ArrayList<Integer>) matchesInRows.clone(); //depassement memoir sur clones ?
                 matchesInRowsToModify.set(row, matchesInRowsToModify.get(row) - i);
-                n.childNodes.add(buildGameTree(matches-i, row, matches, matchesInRowsToModify, game, n.getPlayer()));
+                n.getChildNodes().add(buildGameTree(matches-i, row, matches, matchesInRowsToModify, game, n.getPlayer()));
             }
         }
         return n;
@@ -111,7 +111,7 @@ public class Player {
      */
     public static int computeMinimax(Node node, Game game){
         int res;
-        if(node.matches == 0)
+        if(node.getMatches() == 0)
             return (node.getPlayer().equals(game.getPlayer1()))?1:-1;
         else
         if(node.getPlayer().equals(game.getPlayer1())){
@@ -136,15 +136,15 @@ public class Player {
      * @return
      */
     public static Node findBestMove(Player player, Game game){
-        Node root = buildGameTree(game.getMatches(),0,game.getMatches(),(ArrayList<Integer>) game.getMatchesInRows().clone(), game, game.player1); //Creation de l'arbre
+        Node root = buildGameTree(game.getMatches(),0,game.getMatches(),(ArrayList<Integer>) game.getMatchesInRows().clone(), game, game.getCurrentPlayer()); //Creation de l'arbre
         Node moveTo;
         moveTo = root.getChildNodes().get(0);
         for(Node n:root.getChildNodes()){
             computeMinimax(n, game); //Attribution des points MinMax sur tous les noeud fils du noeud pere
-            if(player.equals(game.getPlayer1()) && n.getMiniMax()>moveTo.getMiniMax())
+            if(player.equals(game.getPlayer1()) && n.getMiniMax() > moveTo.getMiniMax())
                 moveTo = n;
             else
-                if(player.equals(game.getPlayer2()) && n.getMiniMax()<moveTo.getMiniMax())
+                if(player.equals(game.getPlayer2()) && n.getMiniMax() < moveTo.getMiniMax())
                     moveTo = n;
         }
         return moveTo;
