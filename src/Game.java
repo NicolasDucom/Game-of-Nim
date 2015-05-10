@@ -61,7 +61,7 @@ public class Game {
      * @param lastPlayertoHavePlayed
      */
     public void setLastPlayertoHavePlayed(Player lastPlayertoHavePlayed) {
-        setLastPlayertoHavePlayed(lastPlayertoHavePlayed);
+        this.lastPlayertoHavePlayed = lastPlayertoHavePlayed;
         if(getLastPlayertoHavePlayed().equals(getPlayer1()))
             setCurrentPlayer(getPlayer2());
         else
@@ -108,6 +108,9 @@ public class Game {
         }
     }
 
+    /**
+     * On change de joueur et on rejoue
+     */
     public void nextTurn(){
         printMatchesInRows();
         if (this.getLastPlayertoHavePlayed() == null)
@@ -127,7 +130,7 @@ public class Game {
      * Le dernier joueur a avoir joué a perdu
      */
     public void printWinningPlayer(){
-        System.out.println("Le "+currentPlayer.getName()+" a gagné");
+        System.out.println("Le "+getCurrentPlayer().getName()+" a gagné");
     }
 
 

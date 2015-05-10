@@ -117,7 +117,7 @@ public class Node {
      * @return
      */
     public int verticalDistanceFromNode(Node childNode, Node targetNode,int n){
-       for(Node node:targetNode.childNodes){
+       for(Node node:targetNode.getChildNodes()){
         if(node.equals(childNode)){
             return n;
         } else {

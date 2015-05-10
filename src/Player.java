@@ -31,20 +31,25 @@ public class Player {
     }
 
     public void play(Game game){
+        long timerStart = System.currentTimeMillis();
+        long totalTime;
         if(isAi())
             playAsAi(game);
         else
-            playAsHuman(game.getMatchesInRows());
+            playAsHuman(game.getMatchesInRows(),game.getCurrentPlayer());
+        totalTime = (System.currentTimeMillis() - timerStart);
+        System.out.println(game.getCurrentPlayer().getName()+" a joué en "+totalTime+" millisecondes");
+
     }
 
     /**
      * Si le joueur est un humain -> interface de selection
      * @param matchesInRows
      */
-    public void playAsHuman(ArrayList<Integer> matchesInRows){
+    public void playAsHuman(ArrayList<Integer> matchesInRows, Player player){
         Scanner in = new Scanner(System.in);
         int row, matches;
-        System.out.println("Sur quelle rangee voulez-vous prendre une allumette ?");
+        System.out.println(player.getName()+" ,sur quelle rangee voulez-vous prendre une allumette ?");
         row = in.nextInt();
 
         while(!(row > 0 && row <= matchesInRows.size()) || !(matchesInRows.get(row-1) > 0)){
@@ -97,7 +102,7 @@ public class Player {
             for(int row:n.rowsInWhichMatchesCanBeRemoved(matchesInRows, i)){ //rangees sur lequelles un nombre d'allumettes peuvent etre enlevées
                 matchesInRowsToModify = (ArrayList<Integer>) matchesInRows.clone(); //depassement memoir sur clones ?
                 matchesInRowsToModify.set(row, matchesInRowsToModify.get(row) - i);
-                n.getChildNodes().add(buildGameTree(matches-i, row, matches, matchesInRowsToModify, game, n.getPlayer()));
+                n.getChildNodes().add(buildGameTree(matches - i, row, matches, matchesInRowsToModify, game, n.getPlayer()));
             }
         }
         return n;
@@ -122,7 +127,7 @@ public class Player {
         else{
             res = 1;
             for(Node n:node.getChildNodes())
-                res = Math.min(res,computeMinimax(n,game));
+                res = Math.max(res,computeMinimax(n,game));
         }
 
         node.setMiniMax(res);
