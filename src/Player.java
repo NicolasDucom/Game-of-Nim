@@ -127,7 +127,7 @@ public class Player {
         else{
             res = 1;
             for(Node n:node.getChildNodes())
-                res = Math.max(res,computeMinimax(n,game));
+                res = Math.min(res,computeMinimax(n,game));
         }
 
         node.setMiniMax(res);

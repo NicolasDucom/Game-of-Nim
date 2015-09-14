@@ -1,6 +1,5 @@
 import java.io.Console;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Main {
 
@@ -46,12 +45,12 @@ public class Main {
 
         game = new Game(player1,player2);
 
-        System.out.println("Nombre de rangees d'allumettes ?");
+        System.out.println("Nombre de rangées d'allumettes ?");
         System.out.println("Choisir:");
         input = in.nextInt();
 
         while(input < 1){
-            System.out.println("Veuillez selectionner un nombre de rangees supérieur a 0");
+            System.out.println("Veuillez selectionner un nombre de rangées supérieur à 0");
             System.out.println("Choisir:");
             input = in.nextInt();
         }

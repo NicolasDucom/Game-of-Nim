@@ -80,6 +80,8 @@ public class Node {
                 max = i;
             }
         }
+        if(max>3)
+            max = 3;
         return max;
     }
 
